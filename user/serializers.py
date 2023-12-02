@@ -1,6 +1,7 @@
 from django.contrib.auth import password_validation
 from rest_framework import serializers
 from .models import User, Alumni, Mahasiswa, PengalamanKerja, Pengalaman, Lomba
+from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
@@ -13,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'password', 'nama_lengkap', 'npm', 'nomor_hp', 'foto_profil']
 
     def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
         user_type = validated_data.pop('user_type', None)
         user = super().create(validated_data)
         user.set_password(validated_data['password'])
