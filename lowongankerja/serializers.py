@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import LowonganKerja
+from .models import LowonganKerja
 from informasikarier.models import Karier
 from user.models import Alumni
 
