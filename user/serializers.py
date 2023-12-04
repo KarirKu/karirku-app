@@ -7,18 +7,16 @@ class UserSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     password = serializers.CharField(
         style={'input_type': 'password'},
-        write_only=True
     )
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'npm', 'email', 'password', 'nama_lengkap', 'nomor_hp', 'foto_profil', 'user_type', 'pendidikan', 'pengalaman']
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         user = super().create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
+        
         return user
 
     def validate_password(self, value):
