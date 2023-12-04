@@ -19,11 +19,13 @@ class UserManager(BaseUserManager):
         user = self.create_user(email, password=password, **other_fields)
         user.is_admin = True
         user.is_superuser = True
+        user.is_staff = True
         user.save(using=self._db)
         return user
 
 
 class User(AbstractUser):
+    username = None
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     npm = models.CharField(max_length=10, unique=True)
     email = models.EmailField(max_length=100, unique=True)
@@ -34,11 +36,13 @@ class User(AbstractUser):
     is_verified = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
     objects = UserManager()
 
-    REQUIRED_FIELDS = ['email', 'nama_lengkap', 'npm', 'nomor_hp']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nama_lengkap', 'npm', 'nomor_hp']
 
     def __str__(self):
         return self.nama_lengkap
