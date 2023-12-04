@@ -22,4 +22,5 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('cerita-alumni/', include('ceritaalumni.urls')),
     path('informasi-karier/', include('informasikarier.urls')),
+    path('lowongan-kerja/', include('lowongankerja.urls')),
 ]
