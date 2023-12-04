@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import LowonganKerja
 from informasikarier.models import Karier
-from user.models import Alumni
+from user.models import User
 
 class LowonganKerjaSerializer(serializers.ModelSerializer):
     alumni = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
@@ -12,7 +12,7 @@ class LowonganKerjaSerializer(serializers.ModelSerializer):
         fields = ['id', 'posisi', 'nama_instansi', 'deskripsi', 'eligibilitas', 'tanggal_buka', 'tanggal_tutup', 'link', 'alumni', 'karier']
     
     def create(self, validated_data):
-        validated_data['alumni'] = Alumni.objects.get(id=validated_data['alumni'].id)
+        validated_data['alumni'] = User.objects.get(id=validated_data['alumni'].id)
         return LowonganKerja.objects.create(**validated_data)
 
     def update(self, instance: LowonganKerja, validated_data):
