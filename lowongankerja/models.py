@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 
-from user.models import Alumni
+from user.models import User
 from informasikarier.models import Karier
 
 class LowonganKerja(models.Model):
@@ -13,7 +13,7 @@ class LowonganKerja(models.Model):
     tanggal_buka = models.DateTimeField(null=False)
     tanggal_tutup = models.DateTimeField()
     link = models.URLField()
-    alumni = models.ForeignKey(Alumni, on_delete=models.CASCADE, null=False)
+    alumni = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     karier = models.ForeignKey(Karier, on_delete=models.CASCADE, null=False)
     
     def __str__(self):
