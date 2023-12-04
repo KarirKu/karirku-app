@@ -3,14 +3,14 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView, RetrieveAPIView
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from .models import User
 from .serializers import UserSerializer
 from .permissions import IsCurrentUserOrReadOnly
 
 class Register(CreateAPIView):
     queryset = User.objects.all()
-    parser_classes = [FormParser, MultiPartParser]
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
     serializer_class = UserSerializer
     throttle_scope = 'register'
 

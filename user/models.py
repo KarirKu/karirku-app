@@ -16,6 +16,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **other_fields):
+        other_fields.setdefault('user_type', 'admin')
         user = self.create_user(email, password=password, **other_fields)
         user.is_admin = True
         user.is_superuser = True
@@ -38,6 +39,12 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    USER_CHOICES = [
+        ('admin', 'Admin'),
+        ('alumni', 'Alumni'),
+        ('mahasiswa', 'Mahasiswa'),
+    ]
+    user_type = models.CharField(max_length=20, choices=USER_CHOICES)
 
     objects = UserManager()
 
@@ -56,15 +63,14 @@ class Mahasiswa(User):
 
 class Pendidikan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pendidikans_user')
     nama_perguruan_tinggi = models.CharField(max_length=100)
     prodi = models.CharField(max_length=100)
     bidang = models.CharField(max_length=100)
 
-    def __str__(self):
-        return f"{self.nama_perguruan_tinggi} - {self.prodi}"
-
 class Pengalaman(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(Mahasiswa, on_delete=models.CASCADE, related_name='pengalaman_mahasiswa')
     nama_pengalaman = models.CharField(max_length=100)
     nama_instansi = models.CharField(max_length=100)
     tanggal_mulai = models.DateTimeField()
@@ -72,12 +78,14 @@ class Pengalaman(models.Model):
 
 class Lomba(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(Mahasiswa, on_delete=models.CASCADE, related_name='lombas_mahasiswa')
     nama_lomba = models.CharField(max_length=100)
     penyelenggara = models.CharField(max_length=100)
     hasil_lomba = models.CharField(max_length=100)
 
 class PengalamanKerja(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(Alumni, on_delete=models.CASCADE, related_name='kerjas_alumni')
     nama_pengalaman = models.CharField(max_length=100)
     nama_instansi = models.CharField(max_length=100)
     tanggal_mulai = models.DateTimeField()
