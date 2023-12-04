@@ -10,14 +10,20 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('informasikarier', '0001_initial'),
+        ('informasikarier', '0002_initial'),
+        ('lowongankerja', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='karier',
-            name='admin',
+            model_name='lowongankerja',
+            name='alumni',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='lowongankerja',
+            name='karier',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='informasikarier.karier'),
         ),
     ]
