@@ -16,14 +16,3 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return obj.alumni == User.objects.get(id=request.user.id)
         except:
             return False
-
-class IsAlumniUser(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if not request.user.is_authenticated:
-            return False
-        
-        try:
-            User.objects.get(id=request.user.id)
-            return True
-        except:
-            return False
