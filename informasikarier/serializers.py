@@ -10,7 +10,7 @@ class KarierSerializer(serializers.ModelSerializer):
         fields = ['id', 'admin', 'nama', 'deskripsi_pekerjaan', 'kompetensi', 'tanggung_jawab']
     
     def create(self, data):
-        data['admin'] = User.objects.get(is_staff=True)
+        data['admin'] = User.objects.get(id=data['admin'].id, is_staff=True)
         return Karier.objects.create(**data)
 
     def update(self, instance, data):
