@@ -1,9 +1,5 @@
-from rest_framework import permissions, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView
-from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from models import LowonganKerja
 from serializers import LowonganKerjaSerializer
 from permissions import IsOwner, IsAlumniUser
