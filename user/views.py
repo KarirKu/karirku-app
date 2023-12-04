@@ -6,11 +6,10 @@ from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAP
 from rest_framework.parsers import FormParser, MultiPartParser
 from .models import User
 from .serializers import UserSerializer
-from .permissions import IsCurrentUserOrReadOnly, IsAlumniUser
+from .permissions import IsCurrentUserOrReadOnly
 
 class Register(CreateAPIView):
     queryset = User.objects.all()
-    # permission_classes=[IsAlumniUser]
     parser_classes = [FormParser, MultiPartParser]
     serializer_class = UserSerializer
     throttle_scope = 'register'
@@ -23,10 +22,6 @@ class UserView(RetrieveUpdateAPIView):
     http_method_names = ['get', 'head', 'patch']
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
-
-class UserListView(ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 class CurrentUser(APIView):
     permission_classes = [permissions.IsAuthenticated]
