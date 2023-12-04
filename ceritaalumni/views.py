@@ -4,7 +4,8 @@ from .models import CeritaAlumni
 from .serializers import CeritaAlumniSerializer
 from rest_framework.generics import ListAPIView, DestroyAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .permissions import IsOwnerOrReadOnly, IsAlumniUser
+from .permissions import IsOwnerOrReadOnly
+from user.permissions import IsAlumniUser
 
 def now(request):
     now = datetime.datetime.now() 

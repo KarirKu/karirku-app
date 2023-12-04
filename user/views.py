@@ -23,10 +23,6 @@ class UserView(RetrieveUpdateAPIView):
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
 
-class UserListView(ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
 class CurrentUser(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):

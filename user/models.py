@@ -16,6 +16,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **other_fields):
+        other_fields.setdefault('user_type', 'admin')
         user = self.create_user(email, password=password, **other_fields)
         user.is_admin = True
         user.is_superuser = True
@@ -32,12 +33,19 @@ class User(AbstractUser):
     nama_lengkap = models.CharField(max_length=100)
     nomor_hp = models.CharField(max_length=15)
     foto_profil = models.URLField(blank=True)
-    pendidikan = models.ManyToManyField('Pendidikan', related_name='pendidikan_users')
+    pendidikan = models.TextField(blank=True)
+    pengalaman = models.TextField(blank=True)
     is_verified = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    USER_CHOICES = [
+        ('admin', 'Admin'),
+        ('alumni', 'Alumni'),
+        ('mahasiswa', 'Mahasiswa'),
+    ]
+    user_type = models.CharField(max_length=20, choices=USER_CHOICES)
 
     objects = UserManager()
 
@@ -46,39 +54,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.nama_lengkap
-
-class Alumni(User):
-    pengalaman_kerja = models.ManyToManyField('PengalamanKerja', related_name='alumni')
-
-class Mahasiswa(User):
-    pengalaman = models.ManyToManyField('Pengalaman', related_name='pengalaman_mhs')
-    lomba = models.ManyToManyField('Lomba', related_name='lomba_mhs')
-
-class Pendidikan(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nama_perguruan_tinggi = models.CharField(max_length=100)
-    prodi = models.CharField(max_length=100)
-    bidang = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"{self.nama_perguruan_tinggi} - {self.prodi}"
-
-class Pengalaman(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nama_pengalaman = models.CharField(max_length=100)
-    nama_instansi = models.CharField(max_length=100)
-    tanggal_mulai = models.DateTimeField()
-    tanggal_akhir = models.DateTimeField()
-
-class Lomba(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nama_lomba = models.CharField(max_length=100)
-    penyelenggara = models.CharField(max_length=100)
-    hasil_lomba = models.CharField(max_length=100)
-
-class PengalamanKerja(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nama_pengalaman = models.CharField(max_length=100)
-    nama_instansi = models.CharField(max_length=100)
-    tanggal_mulai = models.DateTimeField()
-    tanggal_akhir = models.DateTimeField()
