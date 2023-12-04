@@ -25,7 +25,7 @@ class CreateLowonganKerja(CreateAPIView):
     def perform_create(self, serializer, **kwargs):
         serializer.save(alumni=self.request.user)
 
-class EditCeritaAlumi(UpdateAPIView):
+class EditLowonganKerja(UpdateAPIView):
     permission_classes = (IsOwner,)
     queryset = LowonganKerja.objects.all()
     serializer_class = LowonganKerjaSerializer
