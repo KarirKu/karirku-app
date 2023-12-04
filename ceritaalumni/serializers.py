@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CeritaAlumni
-from user.models import Alumni
+from user.models import User
 
 class CeritaAlumniSerializer(serializers.ModelSerializer):
     alumni = serializers.PrimaryKeyRelatedField( read_only=True, default=serializers.CurrentUserDefault())
@@ -10,7 +10,7 @@ class CeritaAlumniSerializer(serializers.ModelSerializer):
         fields = ['id', 'judul', 'isi', 'alumni']
     
     def create(self, validated_data):
-        validated_data['alumni'] = Alumni.objects.get(id=validated_data['alumni'].id)
+        validated_data['alumni'] = User.objects.get(id=validated_data['alumni'].id)
         return CeritaAlumni.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

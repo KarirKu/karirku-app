@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from user.models import Alumni
+from user.models import User
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -13,7 +13,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         try:
             # Write permissions are only allowed to the owner of the snippet.
-            return obj.alumni == Alumni.objects.get(id=request.user.id)
+            return obj.alumni == User.objects.get(id=request.user.id)
         except:
             return False
 
@@ -23,7 +23,7 @@ class IsAlumniUser(permissions.BasePermission):
             return False
         
         try:
-            Alumni.objects.get(id=request.user.id)
+            User.objects.get(id=request.user.id)
             return True
         except:
             return False
