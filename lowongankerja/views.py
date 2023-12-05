@@ -1,8 +1,9 @@
 from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework.permissions import IsAdminUser
-from models import LowonganKerja
-from serializers import LowonganKerjaSerializer
-from permissions import IsOwner, IsAlumniUser
+from .models import LowonganKerja
+from .serializers import LowonganKerjaSerializer
+from .permissions import IsOwner
+from user.permissions import IsAlumniUser
 
 class DetailLowonganKerja(RetrieveAPIView):
     queryset = LowonganKerja.objects.all()
@@ -25,7 +26,7 @@ class CreateLowonganKerja(CreateAPIView):
     def perform_create(self, serializer, **kwargs):
         serializer.save(alumni=self.request.user)
 
-class EditCeritaAlumi(UpdateAPIView):
+class EditLowonganKerja(UpdateAPIView):
     permission_classes = (IsOwner,)
     queryset = LowonganKerja.objects.all()
     serializer_class = LowonganKerjaSerializer

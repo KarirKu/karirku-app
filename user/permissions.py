@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from .models import Alumni, Mahasiswa
 
 class IsCurrentUserOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -7,11 +6,18 @@ class IsCurrentUserOrReadOnly(permissions.BasePermission):
             return True
 
         return obj == request.user
-
-class IsAlumniOrMahasiswaUser(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if not request.user.is_authenticated:
+    
+class IsAlumniUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        try:
+            return request.user and request.user.user_type == 'alumni'
+        except:
             return False
-        if isinstance(request.user, Alumni) or isinstance(request.user, Mahasiswa):
-            return True
-        return False
+
+class IsMahasiswaUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        try:
+            return request.user and request.user.user_type == 'mahasiswa'
+        except:
+            return False
+        

@@ -18,8 +18,10 @@ RUN pip install -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
 COPY . /app/
 
+WORKDIR /app
 RUN python manage.py migrate
+RUN python manage.py collectstatic
 
 # expose nginx
 EXPOSE 8000
-ENTRYPOINT ["gunicorn", "karirku.wsgi"]
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "karirku.wsgi"]

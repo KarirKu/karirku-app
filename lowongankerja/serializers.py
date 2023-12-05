@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from models import LowonganKerja
+from .models import LowonganKerja
 from informasikarier.models import Karier
-from user.models import Alumni
+from user.models import User
 
 class LowonganKerjaSerializer(serializers.ModelSerializer):
+    tanggal_tutup = serializers.DateTimeField(required=False)
     alumni = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     karier = serializers.PrimaryKeyRelatedField(queryset=Karier.objects.all())
 
@@ -12,10 +13,12 @@ class LowonganKerjaSerializer(serializers.ModelSerializer):
         fields = ['id', 'posisi', 'nama_instansi', 'deskripsi', 'eligibilitas', 'tanggal_buka', 'tanggal_tutup', 'link', 'alumni', 'karier']
     
     def create(self, validated_data):
-        validated_data['alumni'] = Alumni.objects.get(id=validated_data['alumni'].id)
+        validated_data['alumni'] = User.objects.get(id=validated_data['alumni'].id, user_type='alumni')
         return LowonganKerja.objects.create(**validated_data)
 
     def update(self, instance: LowonganKerja, validated_data):
+        if validated_data['tanggal_tutup'] is not None and validated_data['tanggal_buka'] > validated_data['tanggal_tutup']:
+            raise serializers.ValidationError('Tanggal tutup harus setelah tanggal buka')
         return instance.set_details(
             posisi=validated_data['posisi'],
             nama_instansi=validated_data['nama_instansi'],

@@ -25,9 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(64))
 
-DEBUG = os.environ.get('PRODUCTION') != 'True'
+IS_PRODUCTION = os.environ.get('PRODUCTION') == 'True'
+DEBUG = not IS_PRODUCTION
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -80,7 +82,7 @@ WSGI_APPLICATION = 'karirku.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -88,6 +90,16 @@ DATABASES = {
     }
 }
 
+DATABASE_URI = os.environ.get('DATABASE_URI')
+if IS_PRODUCTION and DATABASE_URI is not None:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URI,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -113,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -122,7 +134,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = 'static/'
 
 # Default primary key field type
