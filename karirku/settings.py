@@ -30,7 +30,7 @@ DEBUG = not IS_PRODUCTION
 # DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['karirku-backend.meervix.com', 'karirku.meervix.com']
+CSRF_TRUSTED_ORIGINS = ['https://karirku-backend.meervix.com', 'https://karirku.meervix.com']
 
 # Application definition
 
