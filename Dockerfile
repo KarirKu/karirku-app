@@ -19,6 +19,7 @@ RUN pip install -r /tmp/requirements.txt && rm /tmp/requirements.txt
 COPY . /app/
 
 RUN python manage.py migrate
+RUN python manage.py collectstatic
 
 # expose nginx
 EXPOSE 8000
