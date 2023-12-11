@@ -31,6 +31,7 @@ DEBUG = not IS_PRODUCTION
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://karirku-backend.meervix.com', 'https://karirku.meervix.com']
+CORS_ALLOWED_ORIGINS = ['https://karirku.meervix.com', 'https://karirku-backend.meervix.com', 'http://localhost:3000']
 
 # Application definition
 
@@ -48,11 +49,13 @@ INSTALLED_APPS = [
     'ceritaalumni',
     'informasikarier',
     'lowongankerja',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
