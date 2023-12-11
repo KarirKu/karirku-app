@@ -31,7 +31,7 @@ DEBUG = not IS_PRODUCTION
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://karirku-backend.meervix.com', 'https://karirku.meervix.com']
-CORS_ALLOWED_ORIGINS = ['https://karirku.meervix.com', 'https://karirku-backend.meervix.com', 'http://localhost:3000']
+CORS_ALLOWED_ORIGINS = ['https://karirku.meervix.com', 'https://karirku-backend.meervix.com', 'http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001']
 
 # Application definition
 
