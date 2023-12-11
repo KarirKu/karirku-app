@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+from dotenv import load_dotenv
+load_dotenv()
 
 from datetime import timedelta
 from pathlib import Path
@@ -20,14 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xev$d2hg8ulh$7e(28qh*#!f)2-i9*6bplf)v%7d57d^p#7-n9'
+import os
+SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(64))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+IS_PRODUCTION = os.environ.get('PRODUCTION') == 'True'
+DEBUG = not IS_PRODUCTION
+# DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://karirku-backend.meervix.com', 'https://karirku.meervix.com']
 
 # Application definition
 
@@ -43,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'user',
     'ceritaalumni',
-    'informasikarier'
+    'informasikarier',
+    'lowongankerja',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +83,7 @@ WSGI_APPLICATION = 'karirku.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -87,6 +91,16 @@ DATABASES = {
     }
 }
 
+DATABASE_URI = os.environ.get('DATABASE_URI')
+if IS_PRODUCTION and DATABASE_URI is not None:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URI,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -112,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
@@ -121,7 +135,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = 'static/'
 
 # Default primary key field type

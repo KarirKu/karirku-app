@@ -9,8 +9,15 @@ class IsCurrentUserOrReadOnly(permissions.BasePermission):
     
 class IsAlumniUser(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user and request.user.user_type == 'alumni'
+        try:
+            return request.user and request.user.user_type == 'alumni'
+        except:
+            return False
 
 class IsMahasiswaUser(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user and request.user.user_type == 'mahasiswa'
+        try:
+            return request.user and request.user.user_type == 'mahasiswa'
+        except:
+            return False
+        
